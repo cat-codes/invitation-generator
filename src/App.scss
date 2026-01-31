@@ -1,0 +1,269 @@
+$app-bg: #262525;
+$card-bg: #f4f4f4;
+$muted: #090808; // icons
+$primary: #37281f; // text
+$accent: #2563eb; // active
+
+.app {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: $app-bg;
+  min-height: 100vh;
+  padding: 48px;
+  color: $primary;
+
+  em {
+    font-size: 28px;
+  }
+
+  .ornament-wrapper {
+    display: flex;
+    justify-content: center; // center horizontally
+
+    img {
+      width: 200px; // adjust as needed
+      height: auto;
+    }
+  }
+
+  h1 { // Pakvietimų generatorius
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 32px;
+    color: #d1d5db;
+  }
+
+  section,
+  .event-inputs {
+    background: $card-bg;
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 32px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 18px;
+
+    input {
+      margin-top: 6px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      font-size: 14px;
+
+      &:focus {
+        outline: none;
+        border-color: $accent;
+        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+      }
+    }
+  }
+
+  input[type="file"] {
+    margin-bottom: 40px;
+    font-size: 14px;
+  }
+
+  .preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 28px;
+  }
+
+  .preview-card {
+    background: $card-bg;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .preview-main { // Name and Surname of person in preview
+      padding: 28px 24px;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .preview-actions { // Preview card bottom line
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      background: #8e9b9e;
+      border-top: 1px solid #e5e7eb;
+
+      span {
+        font-size: 12px;
+        font-weight: 600;
+        color: $muted;
+      }
+
+      button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 18px;
+        color: $muted;
+        transition: transform 0.2s ease, color 0.2s ease;
+
+        &:hover {
+          transform: scale(1.2);
+          color: $accent;
+        }
+      }
+    }
+  }
+}
+
+/* ---------- MODALS ---------- */
+
+.modal-bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  .modal {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 48px;
+    position: relative;
+    width: 100%;
+    max-width: 820px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+
+    &.wide {
+      max-width: 1100px;
+    }
+
+    .close {
+      position: absolute;
+      top: 18px;
+      right: 22px;
+      font-size: 28px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: $muted;
+
+      &:hover {
+        color: $primary;
+      }
+    }
+
+    .invitation {
+        .invitation-card {
+            height: 559px;   // A5 width
+            width: 794px;  // A5 height
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+          }
+          
+          .invitation-inner { // Title and text
+            width: 80%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-align: center;
+            font-family: "Times New Roman", serif;
+          
+            .title {
+              font-size: 28px;
+              font-weight: bold;
+              margin-bottom: 40px;
+            }
+
+            .invitation-text {
+                display: flex;
+                flex-direction: column;
+                
+                p {
+                  margin-block: 8px;
+                }                
+            }
+          
+            .date {
+              font-size: 18px;
+              margin-top: 30px;
+            }
+          }          
+    }
+
+    .download {
+      margin-top: 28px;
+      display: flex;
+      gap: 12px;
+
+      button {
+        padding: 10px 18px;
+        border-radius: 10px;
+        border: 1px solid #d1d5db;
+        background: #f9fafb;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.2s ease, transform 0.2s ease;
+
+        &:hover {
+          background: #eef2ff;
+          transform: translateY(-1px);
+        }
+      }
+    }
+
+    .email-columns {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      h3 {
+        font-size: 16px;
+        margin-bottom: 8px;
+      }
+    
+      textarea {
+        width: 100%;
+        height: 240px;
+        width: 800px;
+        padding: 14px;
+        border-radius: 12px;
+        border: 1px solid #d1d5db;
+        font-size: 14px;
+        resize: none;
+        background: #f9fafb;
+        margin-bottom: 10px;
+      }
+
+      button {
+        align-self: flex-start;
+        padding: 8px 14px;
+        border-radius: 8px;
+        border: none;
+        background: $accent;
+        color: white;
+        cursor: pointer;
+        font-size: 13px;
+        transition: transform 0.2s ease;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+    }
+  }
+}
