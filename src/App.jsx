@@ -4,7 +4,6 @@ import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import "./App.scss";
 import { TfiEmail } from "react-icons/tfi";
-// import { LuDownload } from "react-icons/lu";
 import Ornament from './assets/ornament.svg';
 
 /* ---------------- NAME DECLINATION ---------------- */
