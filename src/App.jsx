@@ -4,7 +4,7 @@ import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import "./App.scss";
 import { TfiEmail } from "react-icons/tfi";
-import { LuDownload } from "react-icons/lu";
+// import { LuDownload } from "react-icons/lu";
 import Ornament from './assets/ornament.svg';
 
 /* ---------------- NAME DECLINATION ---------------- */
@@ -328,7 +328,6 @@ export default function App() {
 
             <div className="preview-actions">
               <button onClick={() => setEmailPerson(p)}><TfiEmail /></button>
-              <button onClick={() => setSelectedPerson(p)}><LuDownload /></button>
               <span>{p.language}</span>
             </div>
           </div>
