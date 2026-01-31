@@ -121,11 +121,11 @@ const formatDateDE = (iso) =>
 const emailTextLT = (p, link, event) => `
 Laba diena, 
 
-maloniai kviečiame ${toAccusative(p.surname, p.gender)} į ${toAccusativeDynamic(event.titleLT)} ${toAccusative(p.name, p.gender)}.
+maloniai kviečiame ${toAccusative(p.name, p.gender)} s${toAccusative(p.surname, p.gender)} į ${toAccusativeDynamic(event.titleLT)}.
 
-Renginys vyks ${event.date} ${event.time} Lietuvos Respublikos generaliniame konsulate Miunchene.
+Renginys vyks ${formatDateLT(event.date)} ${event.time} val. Lietuvos Respublikos generaliniame konsulate Miunchene.
 
-Prašome patvirtinti arba atsisakyti dalyvavimo užpildant formą:
+Prašome patvirtinti savo dalyvavimą arba atsisakyti pakvietimo užpildant šią formą:
 
 ${link}
 

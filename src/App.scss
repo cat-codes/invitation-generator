@@ -4,12 +4,21 @@ $muted: #090808; // icons
 $primary: #37281f; // text
 $accent: #2563eb; // active
 
+html, body {
+  margin: 0;
+  padding: 0;
+  background: $app-bg;
+}
+
 .app {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   background: $app-bg;
   min-height: 100vh;
   padding: 48px;
   color: $primary;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
 
   em {
     font-size: 28px;
@@ -72,6 +81,8 @@ $accent: #2563eb; // active
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 28px;
+    width: 100%;
+    max-width: 100%;
   }
 
   .preview-card {
