@@ -4,115 +4,72 @@ import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import "./App.scss";
 import { TfiEmail } from "react-icons/tfi";
-import Ornament from './assets/ornament.svg';
+import herbas from "./assets/herbas.png";
+import JSZip from "jszip";
+import { createRoot } from "react-dom/client";
 
-/* ---------------- NAME DECLINATION ---------------- */
+/* ---------------- DECLINATION ---------------- */
 
-function toLocative(eventName) {
-  if (!eventName) return "";
+function decline(input, caseType = "accusative") {
+  if (!input) return "";
 
-  const words = eventName.split(" ");
+  const words = input.split(" ");
   const lastWord = words[words.length - 1];
   const lower = lastWord.toLowerCase();
 
-  let declined = lower;
+  let declined = lastWord;
 
-  // Masculine nouns
-  if (lower.endsWith("as")) declined = lower.slice(0, -2) + "e";
-  else if (lower.endsWith("is") || lower.endsWith("ys")) declined = lower.slice(0, -2) + "yje";
-  // Feminine nouns
-  else if (lower.endsWith("a")) declined = lower.slice(0, -1) + "oje";
-  else if (lower.endsWith("ė")) declined = lower.slice(0, -1) + "ėje";
+  if (caseType === "accusative") {
+    if (lower.endsWith("a")) declined = lastWord.slice(0, -1) + "ą";
+    else if (lower.endsWith("ė")) declined = lastWord.slice(0, -1) + "ę";
+    else if (lower.endsWith("as")) declined = lastWord.slice(0, -2) + "ą";
+    else if (lower.endsWith("is") || lower.endsWith("ys"))
+      declined = lastWord.slice(0, -2) + "į";
+  } else if (caseType === "locative") {
+    if (lower.endsWith("as")) declined = lastWord.slice(0, -2) + "e";
+    else if (lower.endsWith("is") || lower.endsWith("ys"))
+      declined = lastWord.slice(0, -2) + "yje";
+    else if (lower.endsWith("a")) declined = lastWord.slice(0, -1) + "oje";
+    else if (lower.endsWith("ė")) declined = lastWord.slice(0, -1) + "ėje";
+  } else if (caseType === "vocative") {
+    if (lower.endsWith("ė")) declined = lastWord.slice(0, -1) + "e";
+    else if (lower.endsWith("as")) declined = lastWord.slice(0, -2) + "ai";
+    else if (lower.endsWith("is")) declined = lastWord.slice(0, -2) + "i";
+    else if (lower.endsWith("ys")) declined = lastWord.slice(0, -2) + "y";
+  }
 
   words[words.length - 1] = declined;
   return words.join(" ");
 }
 
-// function toVocative(name, gender) {
-//   if (!name) return "";
-//   const firstLetter = name[0].toUpperCase();
-//   const rest = name.slice(1);
-//   let vocative = firstLetter + rest;
-
-//   if (gender === "F") {
-//     if (vocative.endsWith("ė")) vocative = vocative.slice(0, -1) + "e";
-//   } else {
-//     if (vocative.endsWith("as")) vocative = vocative.slice(0, -2) + "ai";
-//     else if (vocative.endsWith("is")) vocative = vocative.slice(0, -2) + "i";
-//     else if (vocative.endsWith("ys")) vocative = vocative.slice(0, -2) + "y";
-//   }
-//   return vocative;
-// }
-
-/* ---------------- NAME AND SURNAME DECLINATION ---------------- */
-
-
-function toAccusative(name, gender) {
-  if (!name) return "";
-  const firstLetter = name[0].toUpperCase();
-  let rest = name.slice(1);
-  let accusative = firstLetter + rest;
-
-  if (gender === "F") {
-    if (accusative.endsWith("a")) {
-      accusative = accusative.slice(0, -1) + "ą";
-    } else if (accusative.endsWith("ė")) {
-      accusative = accusative.slice(0, -1) + "ę";
-    }
-  } else {
-    if (accusative.endsWith("as")) {
-      accusative = accusative.slice(0, -2) + "ą";
-    } else if (accusative.endsWith("is") || accusative.endsWith("ys")) {
-      accusative = accusative.slice(0, -2) + "į";
-    }
-  }
-
-  return accusative;
-}
-
-/* ---------------- EVENT NAME DECLINATION ---------------- */
-
-function toAccusativeDynamic(word) {
-  if (!word) return "";
-
-  const firstLetter = word[0].toUpperCase();
-  let rest = word.slice(1);
-  let accusative = firstLetter + rest;
-
-  const lower = word.toLowerCase();
-
-  // Feminine endings
-  if (lower.endsWith("a")) {
-    accusative = accusative.slice(0, -1) + "ą";
-  } else if (lower.endsWith("ė")) {
-    accusative = accusative.slice(0, -1) + "ę";
-  } 
-  // Masculine endings
-  else if (lower.endsWith("as")) {
-    accusative = accusative.slice(0, -2) + "ą";
-  } else if (lower.endsWith("is") || lower.endsWith("ys")) {
-    accusative = accusative.slice(0, -2) + "į";
-  }
-
-  return accusative;
-}
-
 /* ---------------- DATE FORMATTING ---------------- */
 
 const formatDateLT = (iso) => {
+  // iso - date format: yyyy-mm-dd
   const d = new Date(iso);
   const months = [
-    "sausio", "vasario", "kovo", "balandžio", "gegužės", "birželio",
-    "liepos", "rugpjūčio", "rugsėjo", "spalio", "lapkričio", "gruodžio"
+    "sausio",
+    "vasario",
+    "kovo",
+    "balandžio",
+    "gegužės",
+    "birželio",
+    "liepos",
+    "rugpjūčio",
+    "rugsėjo",
+    "spalio",
+    "lapkričio",
+    "gruodžio",
   ];
   return `${d.getFullYear()} m. ${months[d.getMonth()]} ${d.getDate()}-ą`;
 };
 
 const formatDateDE = (iso) =>
   new Date(iso).toLocaleDateString("de-DE", {
+    // de-DE - german (Germany) formatting
     day: "numeric",
     month: "long",
-    year: "numeric"
+    year: "numeric",
   });
 
 /* ---------------- EMAIL TEXT ---------------- */
@@ -120,7 +77,7 @@ const formatDateDE = (iso) =>
 const emailTextLT = (p, link, event) => `
 Laba diena, 
 
-maloniai kviečiame ${toAccusative(p.name, p.gender)} ${toAccusative(p.surname, p.gender)} į ${toAccusativeDynamic(event.titleLT)}.
+maloniai kviečiame ${decline(p.name, "accusative")} ${decline(p.surname, "accusative")} į ${decline(event.titleLT, "accusative")}.
 
 Renginys vyks ${formatDateLT(event.date)} ${event.time} val. Lietuvos Respublikos generaliniame konsulate Miunchene.
 
@@ -151,72 +108,99 @@ Generalkonsulat der Republik Litauen
 
 export const InvitationTextLT = ({ person, event }) => (
   <div className="invitation-text">
-    <p>
-      Maloniai kviečiame dalyvauti <br />
-    </p>
-
-      <br />
-      
-      <p>
-        <strong><em>{toAccusative(person.name, person.gender)} {toAccusative(person.surname, person.gender)}</em></strong>
-      </p>
-
-      <br />
-
-      <p>
-      {toLocative(event.titleLT)}.
-      </p>
-
-      <div className="ornament-wrapper">
-        <img src={Ornament} alt="Ornament" />
-      </div>
-
-    <p>
-      Renginys vyks {formatDateLT(event.date)} {event.time} val.<br />
-      Lietuvos Respublikos generaliniame konsulate Miunchene.
-    </p>
-
+    <div className="herbas-wrapper">
+      <img src={herbas} alt="herbas" />
+    </div>
     <br />
-
     <p>
-      Pagarbiai<br />
-      LR generalinis konsulatas Miunchene
+      Lietuvos Respublikos nepriklausomybės atkūrimo dienos proga Lietuvos
+      Respublikos generalinis konsulas Donatas Kušlys maloniai kviečia <br />
     </p>
+    <br />
+    <p>
+      <strong>
+        <em>
+          p. {decline(person.additive, "accusative")}{" "}
+          {decline(person.name, "accusative")}{" "}
+          {decline(person.surname, "accusative")}
+        </em>
+      </strong>
+    </p>
+    <br />
+    <p>
+      dalyvauti priėmime, kuris vyks kovo 11 d., trečiadienį, 18 val. Lietuvos
+      Respublikos generaliniame konsulate Miunchene.
+    </p>
+    <br />
+    <div className="details">
+      <p className="left">
+        Lietuvos Respublikos generalinis konsulatas Miunchene <br />
+        Thomas-Wimmer-Ring 1, 80539 Miunchenas
+      </p>
+      <p className="right">
+        R.S.V.P. iki kovo 5 d. <br />
+        info-munich@mfa.lt <br />
+        Tel.: +49 89 244 298 000 <br />
+        Dark Suit
+      </p>
+    </div>
+    <br />
+    <p className="note">
+      Kvietimas yra asmeninis ir kitiems asmenims neperduodamas; <br />
+      maloniai prašome jį turėti atvykstant.
+    </p>
+    <br /> <br /> <br />
   </div>
 );
 
 export const InvitationTextDE = ({ person, event }) => (
   <div className="invitation-text">
-    <p>
-      Wir laden herzlich ein zur {event.titleDE}
-    </p>
-
-    <br />
-
-    <p>
-      <strong><em>{person.gender === "F" ? "Frau" : "Herrn"} {person.name} {person.surname}</em></strong>
-    </p>
-
-    <br />
-
-    <div className="ornament-wrapper">
-      <img src={Ornament} alt="Ornament" />
+    <div className="herbas-wrapper">
+      <img src={herbas} alt="herbas" />
     </div>
-
-    <p>
-      Die Veranstaltung findet am {formatDateDE(event.date)} um {event.time} Uhr 
-      im Generalkonsulat der Republik Litauen in München statt.
-    </p>
-
     <br />
-
     <p>
-      Mit freundlichen Grüßen<br />
-      Generalkonsulat der Republik Litauen
+      Anlässlich des Tages der Wiederherstellung der Unabhängigkeit der Republik
+      Litauen hat der Generalkonsul der Republik Litauen, Herr Donatas Kušlys,
+      die Ehre,
+      <br />
     </p>
+    <br />
+    <p>
+      <strong>
+        <em>
+          {person.address} {person.additive} {person.name} {person.surname}
+        </em>
+      </strong>
+    </p>
+    <br />
+    <p>
+      zu einem Empfang am Mittwoch, dem 11. März 2026 um 18.00 Uhr im
+      Generalkonsulat der Republik Litauen in München einzuladen.
+    </p>
+    <br />
+    <div className="details">
+      <p className="left">
+        Generalkonsulat der Republik Litauen in München Thomas-Wimmer-Ring 1,
+        80539 München
+      </p>
+      <p className="right">
+        U. A. w. g. bis zum 5. März 2026 <br />
+        info-munich@mfa.lt <br />
+        Tel.: +49 89 244 298 000 <br />
+        Dark Suit
+      </p>
+    </div>
+    <br />
+    <p className="note">
+      Persönliche Einladung, nicht übertragbar. <br />
+      Bitte bringen Sie Ihre Einladung zur Einlasskontrolle mit. <br />
+      Bitte beachten Sie, dass am Generalkonsulat keine öffentlichen Parkplätze
+      zur Verfügung stehen.
+    </p>
+    <br /> <br /> <br />
   </div>
 );
-
 
 /* ---------------- MAIN COMPONENT ---------------- */
 
@@ -226,10 +210,10 @@ export default function App() {
   const [emailPerson, setEmailPerson] = useState(null);
 
   const [event, setEvent] = useState({
-    titleLT: "",
-    titleDE: "",
+    // titleLT: "",
+    // titleDE: "",
     date: "",
-    time: ""
+    time: "",
   });
 
   /* ---------- EXCEL UPLOAD ---------- */
@@ -239,14 +223,22 @@ export default function App() {
       const workbook = XLSX.read(evt.target.result, { type: "binary" });
       const sheet = workbook.Sheets[workbook.SheetNames[0]];
 
-      const raw = XLSX.utils.sheet_to_json(sheet, { defval: "", raw: false, blankrows: false });
+      const raw = XLSX.utils.sheet_to_json(sheet, {
+        defval: "",
+        raw: false,
+        blankrows: false,
+      });
 
-      const cleaned = raw.map(r => ({
-        name: (r.name || "").toString().trim(),
-        surname: (r.surname || "").toString().trim(),
+      const cleaned = raw.map((r) => ({
+        name: (r.vardas || "").toString().trim(),
+        surname: (r.pavardė || "").toString().trim(),
         email: (r.email || "").toString().trim(),
-        gender: (r.gender || "").toString().trim(),
-        language: (r.language || "").toString().trim().toUpperCase()
+        address:
+          (r.kreipinys || "").toString().trim().toLowerCase() === "herr"
+            ? "Herrn"
+            : (r.kreipinys || "").toString().trim(),
+        additive: (r.papildinys || "").toString().trim(),
+        language: (r.kalba || "").toString().trim().toUpperCase(),
       }));
 
       setPeople(cleaned);
@@ -295,12 +287,68 @@ export default function App() {
     }
   };
 
+  const downloadAllInvitations = async (format) => {
+    const zip = new JSZip();
+    const renderTarget = document.getElementById("bulk-inner");
+
+    for (const p of people) {
+      renderTarget.innerHTML = "";
+
+      const mount = document.createElement("div");
+      renderTarget.appendChild(mount);
+
+      const root = createRoot(mount);
+
+      root.render(
+        <div className="invitation-inner">
+          <h2 className="title">
+            {p.language === "LT" ? event.titleLT : event.titleDE}
+          </h2>
+
+          {p.language === "LT" ? (
+            <InvitationTextLT person={p} event={event} />
+          ) : (
+            <InvitationTextDE person={p} event={event} />
+          )}
+        </div>,
+      );
+
+      // wait for React + images to finish rendering
+      await new Promise((r) => setTimeout(r, 500));
+
+      const canvas = await html2canvas(document.getElementById("bulk-render"), {
+        scale: 2,
+        useCORS: true,
+      });
+
+      const imgData = canvas.toDataURL("image/jpeg", 1);
+
+      if (format === "jpg") {
+        zip.file(`${p.name}_${p.surname}.jpg`, imgData.split(",")[1], {
+          base64: true,
+        });
+      } else {
+        const pdf = new jsPDF("p", "mm", "a4");
+        pdf.addImage(imgData, "JPEG", 10, 10, 190, 0);
+        zip.file(`${p.name}_${p.surname}.pdf`, pdf.output("blob"));
+      }
+
+      root.unmount();
+    }
+
+    const content = await zip.generateAsync({ type: "blob" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(content);
+    a.download = "Invitations.zip";
+    a.click();
+  };
+
   return (
     <div className="app">
       <h1>Pakvietimų generatorius</h1>
 
       {/* EVENT INPUTS */}
-      <section className="event-inputs">
+      {/* <section className="event-inputs">
         <label>Renginio pavadinimas (LT)
           <input onChange={(e) => setEvent({ ...event, titleLT: e.target.value })} />
         </label>
@@ -313,9 +361,19 @@ export default function App() {
         <label>Laikas
           <input onChange={(e) => setEvent({ ...event, time: e.target.value })} />
         </label>
-      </section>
+      </section> */}
 
       <input type="file" accept=".xlsx" onChange={handleExcelUpload} />
+
+      {/* DOWNLOAD ALL BUTTON */}
+      {/* <div className="bulk-download">
+        <button onClick={() => downloadAllInvitations("pdf")}>
+          Download ALL as PDF
+        </button>
+        <button onClick={() => downloadAllInvitations("jpg")}>
+          Download ALL as JPG
+        </button>
+      </div> */}
 
       {/* PREVIEW GRID */}
       <div className="preview-grid">
@@ -326,7 +384,9 @@ export default function App() {
             </div>
 
             <div className="preview-actions">
-              <button onClick={() => setEmailPerson(p)}><TfiEmail /></button>
+              <button onClick={() => setEmailPerson(p)}>
+                <TfiEmail />
+              </button>
               <span>{p.language}</span>
             </div>
           </div>
@@ -337,13 +397,17 @@ export default function App() {
       {selectedPerson && (
         <div className="modal-bg" onClick={() => setSelectedPerson(null)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <button className="close" onClick={() => setSelectedPerson(null)}>×</button>
+            <button className="close" onClick={() => setSelectedPerson(null)}>
+              ×
+            </button>
 
             <div id="invitation-modal" className="invitation">
               <div className="invitation-card">
                 <div className="invitation-inner">
                   <h2 className="title">
-                    {selectedPerson.language === "LT" ? event.titleLT : event.titleDE}
+                    {selectedPerson.language === "LT"
+                      ? event.titleLT
+                      : event.titleDE}
                   </h2>
 
                   {selectedPerson.language === "LT" ? (
@@ -356,8 +420,12 @@ export default function App() {
             </div>
 
             <div className="download">
-              <button onClick={() => downloadInvitation(selectedPerson, "pdf")}>PDF</button>
-              <button onClick={() => downloadInvitation(selectedPerson, "jpg")}>JPG</button>
+              <button onClick={() => downloadInvitation(selectedPerson, "pdf")}>
+                PDF
+              </button>
+              <button onClick={() => downloadInvitation(selectedPerson, "jpg")}>
+                JPG
+              </button>
             </div>
           </div>
         </div>
@@ -367,7 +435,9 @@ export default function App() {
       {emailPerson && (
         <div className="modal-bg" onClick={() => setEmailPerson(null)}>
           <div className="modal wide" onClick={(e) => e.stopPropagation()}>
-            <button className="close" onClick={() => setEmailPerson(null)}>×</button>
+            <button className="close" onClick={() => setEmailPerson(null)}>
+              ×
+            </button>
 
             <div className="email-columns">
               {emailPerson.language === "LT" && (
@@ -375,12 +445,20 @@ export default function App() {
                   <h3>LT</h3>
                   <textarea
                     readOnly
-                    value={emailTextLT(emailPerson, buildFormLink(emailPerson), event)}
+                    value={emailTextLT(
+                      emailPerson,
+                      buildFormLink(emailPerson),
+                      event,
+                    )}
                   />
                   <button
                     onClick={() =>
                       navigator.clipboard.writeText(
-                        emailTextLT(emailPerson, buildFormLink(emailPerson), event)
+                        emailTextLT(
+                          emailPerson,
+                          buildFormLink(emailPerson),
+                          event,
+                        ),
                       )
                     }
                   >
@@ -394,12 +472,20 @@ export default function App() {
                   <h3>DE</h3>
                   <textarea
                     readOnly
-                    value={emailTextDE(emailPerson, buildFormLink(emailPerson), event)}
+                    value={emailTextDE(
+                      emailPerson,
+                      buildFormLink(emailPerson),
+                      event,
+                    )}
                   />
                   <button
                     onClick={() =>
                       navigator.clipboard.writeText(
-                        emailTextDE(emailPerson, buildFormLink(emailPerson), event)
+                        emailTextDE(
+                          emailPerson,
+                          buildFormLink(emailPerson),
+                          event,
+                        ),
                       )
                     }
                   >
@@ -411,6 +497,13 @@ export default function App() {
           </div>
         </div>
       )}
+      <div style={{ position: "fixed", left: "-9999px", top: 0 }}>
+        <div id="bulk-render" className="invitation">
+          <div className="invitation-card">
+            <div className="invitation-inner" id="bulk-inner"></div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

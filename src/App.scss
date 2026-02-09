@@ -4,14 +4,19 @@ $muted: #090808; // icons
 $primary: #37281f; // text
 $accent: #2563eb; // active
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   background: $app-bg;
 }
 
 .app {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
   background: $app-bg;
   min-height: 100vh;
   padding: 48px;
@@ -24,7 +29,7 @@ html, body {
     font-size: 28px;
   }
 
-  .ornament-wrapper {
+  .herbas-wrapper {
     display: flex;
     justify-content: center; // center horizontally
 
@@ -34,7 +39,8 @@ html, body {
     }
   }
 
-  h1 { // Pakvietimų generatorius
+  h1 {
+    // Pakvietimų generatorius
     font-size: 30px;
     font-weight: 600;
     margin-bottom: 32px;
@@ -90,21 +96,25 @@ html, body {
     border-radius: 18px;
     overflow: hidden;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
 
     &:hover {
       transform: translateY(-4px);
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
     }
 
-    .preview-main { // Name and Surname of person in preview
+    .preview-main {
+      // Name and Surname of person in preview
       padding: 28px 24px;
       font-size: 17px;
       font-weight: 600;
       cursor: pointer;
     }
 
-    .preview-actions { // Preview card bottom line
+    .preview-actions {
+      // Preview card bottom line
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -124,7 +134,9 @@ html, body {
         cursor: pointer;
         font-size: 18px;
         color: $muted;
-        transition: transform 0.2s ease, color 0.2s ease;
+        transition:
+          transform 0.2s ease,
+          color 0.2s ease;
 
         &:hover {
           transform: scale(1.2);
@@ -177,44 +189,65 @@ html, body {
     }
 
     .invitation {
-        .invitation-card {
-            height: 559px;   // A5 width
-            width: 794px;  // A5 height
-            background: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+      .invitation-card {
+        height: 559px; // A5 width
+        width: 794px; // A5 height
+        background: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+      }
+
+      .invitation-inner {
+        // Title and text
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-align: center;
+        font-family: "Times New Roman", serif;
+
+        .title {
+          font-size: 28px;
+          font-weight: bold;
+          margin-bottom: 40px;
+        }
+
+        .invitation-text {
+          display: flex;
+          flex-direction: column;
+
+          p {
+            margin-block: 8px;
           }
-          
-          .invitation-inner { // Title and text
-            width: 80%;
+
+          .details {
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            text-align: center;
-            font-family: "Times New Roman", serif;
-          
-            .title {
-              font-size: 28px;
-              font-weight: bold;
-              margin-bottom: 40px;
+            flex-direction: row;
+            font-size: 12px;
+
+            .left {
+              text-align: left;
+              flex: 1;
             }
 
-            .invitation-text {
-                display: flex;
-                flex-direction: column;
-                
-                p {
-                  margin-block: 8px;
-                }                
+            .right {
+              text-align: right;
+              flex: 1;
             }
-          
-            .date {
-              font-size: 18px;
-              margin-top: 30px;
-            }
-          }          
+          }
+
+          .note {
+            font-size: 12px;
+          }
+        }
+
+        .date {
+          font-size: 18px;
+          margin-top: 30px;
+        }
+      }
     }
 
     .download {
@@ -229,7 +262,9 @@ html, body {
         background: #f9fafb;
         cursor: pointer;
         font-size: 14px;
-        transition: background 0.2s ease, transform 0.2s ease;
+        transition:
+          background 0.2s ease,
+          transform 0.2s ease;
 
         &:hover {
           background: #eef2ff;
@@ -239,14 +274,14 @@ html, body {
     }
 
     .email-columns {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       h3 {
         font-size: 16px;
         margin-bottom: 8px;
       }
-    
+
       textarea {
         width: 100%;
         height: 240px;
