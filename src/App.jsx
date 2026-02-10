@@ -12,10 +12,6 @@ function declineWord(word, caseType) {
   const lower = word.toLowerCase();
   let declined = word;
 
-  function declineWord(word, caseType) {
-  const lower = word.toLowerCase();
-  let declined = word;
-
   if (caseType === "accusative") {
     if (lower.endsWith("a")) declined = word.slice(0, -1) + "ą";
     else if (lower.endsWith("ė")) declined = word.slice(0, -1) + "ę";
