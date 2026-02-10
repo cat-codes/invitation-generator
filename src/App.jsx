@@ -189,8 +189,8 @@ export const InvitationTextDE = ({ person, event }) => (
     <br />
     <div className="details">
       <p className="left">
-        Generalkonsulat der Republik Litauen in München Thomas-Wimmer-Ring 1,
-        80539 München
+        Generalkonsulat der Republik Litauen in München <br />
+        Thomas-Wimmer-Ring 1, 80539 München
       </p>
       <p className="right">
         U. A. w. g. bis zum 5. März 2026 <br />
