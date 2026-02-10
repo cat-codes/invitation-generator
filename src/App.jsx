@@ -10,36 +10,44 @@ import { createRoot } from "react-dom/client";
 
 /* ---------------- DECLINATION ---------------- */
 
+function declineWord(word, caseType) {
+  const lower = word.toLowerCase();
+  let declined = word;
+
+  if (caseType === "accusative") {
+    if (lower.endsWith("a")) declined = word.slice(0, -1) + "ą";
+    else if (lower.endsWith("ė")) declined = word.slice(0, -1) + "ę";
+    else if (lower.endsWith("as")) declined = word.slice(0, -2) + "ą";
+    else if (lower.endsWith("is") || lower.endsWith("ys"))
+      declined = word.slice(0, -2) + "į";
+  } else if (caseType === "locative") {
+    if (lower.endsWith("as")) declined = word.slice(0, -2) + "e";
+    else if (lower.endsWith("is") || lower.endsWith("ys"))
+      declined = word.slice(0, -2) + "yje";
+    else if (lower.endsWith("a")) declined = word.slice(0, -1) + "oje";
+    else if (lower.endsWith("ė")) declined = word.slice(0, -1) + "ėje";
+  } else if (caseType === "vocative") {
+    if (lower.endsWith("ė")) declined = word.slice(0, -1) + "e";
+    else if (lower.endsWith("as")) declined = word.slice(0, -2) + "ai";
+    else if (lower.endsWith("is")) declined = word.slice(0, -2) + "i";
+    else if (lower.endsWith("ys")) declined = word.slice(0, -2) + "y";
+  }
+
+  return declined;
+}
+
 function decline(input, caseType = "accusative") {
   if (!input) return "";
 
-  const words = input.split(" ");
-  const lastWord = words[words.length - 1];
-  const lower = lastWord.toLowerCase();
-
-  let declined = lastWord;
-
-  if (caseType === "accusative") {
-    if (lower.endsWith("a")) declined = lastWord.slice(0, -1) + "ą";
-    else if (lower.endsWith("ė")) declined = lastWord.slice(0, -1) + "ę";
-    else if (lower.endsWith("as")) declined = lastWord.slice(0, -2) + "ą";
-    else if (lower.endsWith("is") || lower.endsWith("ys"))
-      declined = lastWord.slice(0, -2) + "į";
-  } else if (caseType === "locative") {
-    if (lower.endsWith("as")) declined = lastWord.slice(0, -2) + "e";
-    else if (lower.endsWith("is") || lower.endsWith("ys"))
-      declined = lastWord.slice(0, -2) + "yje";
-    else if (lower.endsWith("a")) declined = lastWord.slice(0, -1) + "oje";
-    else if (lower.endsWith("ė")) declined = lastWord.slice(0, -1) + "ėje";
-  } else if (caseType === "vocative") {
-    if (lower.endsWith("ė")) declined = lastWord.slice(0, -1) + "e";
-    else if (lower.endsWith("as")) declined = lastWord.slice(0, -2) + "ai";
-    else if (lower.endsWith("is")) declined = lastWord.slice(0, -2) + "i";
-    else if (lower.endsWith("ys")) declined = lastWord.slice(0, -2) + "y";
-  }
-
-  words[words.length - 1] = declined;
-  return words.join(" ");
+  return input
+    .split(" ") // split surname parts by space
+    .map((word) =>
+      word
+        .split("-") // split hyphenated parts
+        .map((part) => declineWord(part, caseType))
+        .join("-"),
+    )
+    .join(" ");
 }
 
 /* ---------------- DATE FORMATTING ---------------- */
