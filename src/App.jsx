@@ -12,15 +12,21 @@ function declineWord(word, caseType) {
   const lower = word.toLowerCase();
   let declined = word;
 
+  function declineWord(word, caseType) {
+  const lower = word.toLowerCase();
+  let declined = word;
+
   if (caseType === "accusative") {
     if (lower.endsWith("a")) declined = word.slice(0, -1) + "ą";
     else if (lower.endsWith("ė")) declined = word.slice(0, -1) + "ę";
     else if (lower.endsWith("as")) declined = word.slice(0, -2) + "ą";
-    else if (lower.endsWith("is") || lower.endsWith("ys")) declined = word.slice(0, -2) + "į";
-    else if (lower.endsWith("us")) declined = word.slice(0, -2) + "ų";
+    else if (lower.endsWith("is") || lower.endsWith("ys"))
+      declined = word.slice(0, -2) + "į";
+    else if (lower.endsWith("us"))
+      declined = word.slice(0, -2) + "ų";
   } else if (caseType === "locative") {
     if (lower.endsWith("as")) declined = word.slice(0, -2) + "e";
-    else if (lower.endsWith("is") || lower.endsWith("ys")
+    else if (lower.endsWith("is") || lower.endsWith("ys"))
       declined = word.slice(0, -2) + "yje";
     else if (lower.endsWith("a")) declined = word.slice(0, -1) + "oje";
     else if (lower.endsWith("ė")) declined = word.slice(0, -1) + "ėje";
