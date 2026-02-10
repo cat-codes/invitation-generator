@@ -5,8 +5,6 @@ import { jsPDF } from "jspdf";
 import "./App.scss";
 import { TfiEmail } from "react-icons/tfi";
 import herbas from "./assets/herbas.png";
-import JSZip from "jszip";
-import { createRoot } from "react-dom/client";
 
 /* ---------------- DECLINATION ---------------- */
 
@@ -280,7 +278,7 @@ export default function App() {
     const el = document.getElementById("invitation-modal");
     const canvas = await html2canvas(el, { scale: 2 });
     const img = canvas.toDataURL("image/jpeg", 1);
-
+  
     if (format === "jpg") {
       const a = document.createElement("a");
       a.href = img;
@@ -294,92 +292,39 @@ export default function App() {
   };
 
   const downloadAllInvitations = async (format) => {
-    const zip = new JSZip();
-    const renderTarget = document.getElementById("bulk-inner");
-
+    setSelectedPerson(null);
+    
     for (const p of people) {
-      renderTarget.innerHTML = "";
-
-      const mount = document.createElement("div");
-      renderTarget.appendChild(mount);
-
-      const root = createRoot(mount);
-
-      root.render(
-        <div className="invitation-inner">
-          <h2 className="title">
-            {p.language === "LT" ? event.titleLT : event.titleDE}
-          </h2>
-
-          {p.language === "LT" ? (
-            <InvitationTextLT person={p} event={event} />
-          ) : (
-            <InvitationTextDE person={p} event={event} />
-          )}
-        </div>,
-      );
-
-      // wait for React + images to finish rendering
-      await new Promise((r) => setTimeout(r, 500));
-
-      const canvas = await html2canvas(document.getElementById("bulk-render"), {
-        scale: 2,
-        useCORS: true,
-      });
-
-      const imgData = canvas.toDataURL("image/jpeg", 1);
-
-      if (format === "jpg") {
-        zip.file(`${p.name}_${p.surname}.jpg`, imgData.split(",")[1], {
-          base64: true,
-        });
-      } else {
-        const pdf = new jsPDF("p", "mm", "a4");
-        pdf.addImage(imgData, "JPEG", 10, 10, 190, 0);
-        zip.file(`${p.name}_${p.surname}.pdf`, pdf.output("blob"));
-      }
-
-      root.unmount();
+      setSelectedPerson(p);
+  
+      // wait for modal + React render + images
+      await new Promise((r) => setTimeout(r, 800));
+  
+      await downloadInvitation(p, format);
+  
+      // small pause so browser doesn’t block downloads
+      await new Promise((r) => setTimeout(r, 300));
     }
-
-    const content = await zip.generateAsync({ type: "blob" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(content);
-    a.download = "Invitations.zip";
-    a.click();
+  
+    setSelectedPerson(null);
   };
 
   return (
     <div className="app">
       <h1>Pakvietimų generatorius</h1>
 
-      {/* EVENT INPUTS */}
-      {/* <section className="event-inputs">
-        <label>Renginio pavadinimas (LT)
-          <input onChange={(e) => setEvent({ ...event, titleLT: e.target.value })} />
-        </label>
-        <label>Renginio pavadinimas (DE)
-          <input onChange={(e) => setEvent({ ...event, titleDE: e.target.value })} />
-        </label>
-        <label>Data
-          <input type="date" onChange={(e) => setEvent({ ...event, date: e.target.value })} />
-        </label>
-        <label>Laikas
-          <input onChange={(e) => setEvent({ ...event, time: e.target.value })} />
-        </label>
-      </section> */}
-
       <input type="file" accept=".xlsx" onChange={handleExcelUpload} />
 
-      {/* DOWNLOAD ALL BUTTON */}
-      {/* <div className="bulk-download">
+      <div className="bulk-download">
         <button onClick={() => downloadAllInvitations("pdf")}>
           Download ALL as PDF
         </button>
+      
         <button onClick={() => downloadAllInvitations("jpg")}>
           Download ALL as JPG
         </button>
-      </div> */}
+      </div>
+
 
       {/* PREVIEW GRID */}
       <div className="preview-grid">
@@ -503,13 +448,6 @@ export default function App() {
           </div>
         </div>
       )}
-      <div style={{ position: "fixed", left: "-9999px", top: 0 }}>
-        <div id="bulk-render" className="invitation">
-          <div className="invitation-card">
-            <div className="invitation-inner" id="bulk-inner"></div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
