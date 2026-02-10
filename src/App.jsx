@@ -279,21 +279,40 @@ export default function App() {
 
   /* ---------- DOWNLOAD HELPER ---------- */
   const downloadInvitation = async (p, format) => {
-    const el = document.getElementById("invitation-modal");
-    const canvas = await html2canvas(el, { scale: 2 });
-    const img = canvas.toDataURL("image/jpeg", 1);
-  
-    if (format === "jpg") {
-      const a = document.createElement("a");
-      a.href = img;
-      a.download = `${p.name}_${p.surname}.jpg`;
-      a.click();
-    } else {
-      const pdf = new jsPDF("p", "mm", "a4");
-      pdf.addImage(img, "JPEG", 10, 10, 190, 0);
-      pdf.save(`${p.name}_${p.surname}.pdf`);
-    }
-  };
+  const el = document.getElementById("invitation-modal");
+
+  const canvas = await html2canvas(el, {
+    scale: 3,              // more pixels = sharper pdf
+    useCORS: true,
+  });
+
+  const imgData = canvas.toDataURL("image/jpeg", 1.0);
+
+  if (format === "jpg") {
+    const a = document.createElement("a");
+    a.href = imgData;
+    a.download = `${p.name}_${p.surname}.jpg`;
+    a.click();
+    return;
+  }
+
+  const pdf = new jsPDF({
+    orientation: "landscape",
+    unit: "px",
+    format: [canvas.width, canvas.height],
+  });
+
+  pdf.addImage(
+    imgData,
+    "JPEG",
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  pdf.save(`${p.name}_${p.surname}.pdf`);
+};
 
   const downloadAllInvitations = async (format) => {
     setSelectedPerson(null);
