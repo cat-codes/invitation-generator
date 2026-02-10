@@ -20,7 +20,7 @@ function declineWord(word, caseType) {
     else if (lower.endsWith("us") declined = word.slice(0, -2) + "ų";
   } else if (caseType === "locative") {
     if (lower.endsWith("as")) declined = word.slice(0, -2) + "e";
-    else if (lower.endsWith("is") || lower.endsWith("ys"))
+    else if (lower.endsWith("is") || lower.endsWith("ys")
       declined = word.slice(0, -2) + "yje";
     else if (lower.endsWith("a")) declined = word.slice(0, -1) + "oje";
     else if (lower.endsWith("ė")) declined = word.slice(0, -1) + "ėje";
