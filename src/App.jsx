@@ -16,8 +16,8 @@ function declineWord(word, caseType) {
     if (lower.endsWith("a")) declined = word.slice(0, -1) + "ą";
     else if (lower.endsWith("ė")) declined = word.slice(0, -1) + "ę";
     else if (lower.endsWith("as")) declined = word.slice(0, -2) + "ą";
-    else if (lower.endsWith("is") || lower.endsWith("ys"))
-      declined = word.slice(0, -2) + "į";
+    else if (lower.endsWith("is") || lower.endsWith("ys")) declined = word.slice(0, -2) + "į";
+    else if (lower.endsWith("us") declined = word.slice(0, -2) + "ų";
   } else if (caseType === "locative") {
     if (lower.endsWith("as")) declined = word.slice(0, -2) + "e";
     else if (lower.endsWith("is") || lower.endsWith("ys"))
@@ -145,6 +145,7 @@ export const InvitationTextLT = ({ person, event }) => (
       </p>
       <p className="right">
         R.S.V.P. iki kovo 5 d. <br />
+        info-munich@mfa.lt <br />
         Tel.: +49 89 244 298 000 <br />
         Dark Suit
       </p>
@@ -191,6 +192,7 @@ export const InvitationTextDE = ({ person, event }) => (
       </p>
       <p className="right">
         U. A. w. g. bis zum 5. März 2026 <br />
+        info-munich@mfa.lt <br />
         Tel.: +49 89 244 298 000 <br />
         Dark Suit
       </p>
