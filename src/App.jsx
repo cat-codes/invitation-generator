@@ -147,7 +147,6 @@ export const InvitationTextLT = ({ person, event }) => (
       </p>
       <p className="right">
         R.S.V.P. iki kovo 5 d. <br />
-        info-munich@mfa.lt <br />
         Tel.: +49 89 244 298 000 <br />
         Dark Suit
       </p>
@@ -194,7 +193,6 @@ export const InvitationTextDE = ({ person, event }) => (
       </p>
       <p className="right">
         U. A. w. g. bis zum 5. März 2026 <br />
-        info-munich@mfa.lt <br />
         Tel.: +49 89 244 298 000 <br />
         Dark Suit
       </p>
