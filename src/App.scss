@@ -25,6 +25,13 @@ body {
   margin: 0 auto;
   box-sizing: border-box;
 
+  .bulk-download {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    margin-bottom: 50px;
+  }
+
   em {
     font-size: 28px;
   }
