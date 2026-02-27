@@ -98,7 +98,7 @@ LR generalinis konsulatas Miunchene
 `;
 
 const emailTextDE = (p, link, event) => `
-Sehr geehrter Damen und Herren,
+Sehr geehrte Damen und Herren,
 
 wir laden ${p.gender === "F" ? "Frau" : "Herrn"} ${p.surname} zur ${event.titleDE} ein.
 
@@ -314,6 +314,50 @@ export default function App() {
   pdf.save(`${p.name}_${p.surname}.pdf`);
 };
 
+const downloadWordInvitation = (p) => {
+  const el = document.getElementById("invitation-modal");
+
+  if (!el) return;
+
+  const content = el.innerHTML;
+
+  const htmlDocument = `
+    <html xmlns:o="urn:schemas-microsoft-com:office:office"
+          xmlns:w="urn:schemas-microsoft-com:office:word"
+          xmlns="http://www.w3.org/TR/REC-html40">
+    <head>
+      <meta charset="utf-8">
+      <title>Invitation</title>
+      <style>
+        body {
+          font-family: serif;
+        }
+        .invitation {
+          width: 100%;
+        }
+      </style>
+    </head>
+    <body>
+      ${content}
+    </body>
+    </html>
+  `;
+
+  const blob = new Blob(["\ufeff", htmlDocument], {
+    type: "application/msword",
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = `${p.name}_${p.surname}.doc`;
+  document.body.appendChild(link);
+  link.click();
+
+  document.body.removeChild(link);
+};
+
   const downloadAllInvitations = async (format) => {
     setSelectedPerson(null);
     
@@ -400,6 +444,9 @@ export default function App() {
               <button onClick={() => downloadInvitation(selectedPerson, "jpg")}>
                 JPG
               </button>
+               <button onClick={() => downloadWordInvitation(selectedPerson)}>
+                Word
+               </button>
             </div>
           </div>
         </div>
