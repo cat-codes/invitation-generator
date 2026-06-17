@@ -422,7 +422,7 @@ const downloadWordInvitation = (p) => {
               id="invitation-modal"
               className="invitation"
               style={{
-                backgroundImage: `url(${invitationBg})`,
+                backgroundImage: `url(${background})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
