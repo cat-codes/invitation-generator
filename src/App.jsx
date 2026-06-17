@@ -168,43 +168,43 @@ export const InvitationTextDE = ({ person, event }) => (
     </div>
     <br />
     <p>
-      Anlässlich des Tages der Wiederherstellung der Unabhängigkeit der Republik
-      Litauen hat der Generalkonsul der Republik Litauen, Herr Donatas Kušlys,
-      die Ehre,
+      Im Gedenken an den 85. Jahrestag der sowjetischen Deportationen aus Litauen gibt sich der <br />
+      Generalkonsul der Republik Litauen, Herr Donatas Kušlys, unter der Schirmherrschaft von Frau Dr. <br />
+      Petra Loibl, Beauftragte der Bayerischen Staatsregierung für Aussiedler und Vertriebene die Ehre,
       <br />
     </p>
     <br />
     <p>
       <strong>
         <em>
-          {person.address} {person.additive} {person.name} {person.surname}
+          {person.address} {person.additive} {person.name} {person.surname} mit Begleitung
         </em>
       </strong>
     </p>
     <br />
     <p>
-      zu einem Empfang am Mittwoch, dem 11. März 2026 um 18.00 Uhr im
-      Generalkonsulat der Republik Litauen in München einzuladen.
+      zur Vorführung des Films „Ashes in the Snow“ von Marius A. Markevičius am 15. Juli <br />
+      um 18:00 Uhr einzuladen.
     </p>
     <br />
     <div className="details">
       <p className="left">
-        Generalkonsulat der Republik Litauen in München <br />
-        Thomas-Wimmer-Ring 1, 80539 München
+        <strong>Museum Lichtspiele</strong><br />
+        Lilienstraße 2
+        81669 München
       </p>
       <p className="right">
-        U. A. w. g. bis zum 5. März 2026 <br />
-        info-munich@mfa.lt <br />
-        Tel.: +49 89 244 298 000 <br />
-        Dark Suit
+        <strong>Bitte bestätigen Sie Ihre Teilnahme bis zum</strong> <br />
+        <strong>10. Juli 2026</strong> <br />
+        info-munich@mfa.lt<br />
+        Tel.: +49 89 244 298 000
       </p>
     </div>
     <br />
     <p className="note">
-      Persönliche Einladung, nicht übertragbar. <br />
-      Bitte bringen Sie Ihre Einladung zur Einlasskontrolle mit. <br />
-      Bitte beachten Sie, dass am Generalkonsulat keine öffentlichen Parkplätze
-      zur Verfügung stehen.
+      Da die Teilnehmerzahl begrenzt ist, empfehlen wir eine frühzeitige Anmeldung. Die Anmeldung kann bereits vor dem Anmeldeschluss geschlossen <br />
+      werden, falls alle Plätze vergeben sind. <br />
+      Der Film wird in englischer Sprache mit deutschen Untertiteln vorgeführt.
     </p>
     <br /> <br /> <br />
   </div>
