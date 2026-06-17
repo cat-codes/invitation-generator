@@ -117,9 +117,6 @@ Generalkonsulat der Republik Litauen
 
 export const InvitationTextLT = ({ person, event }) => (
   <div className="invitation-text">
-    <div className="herbas-wrapper">
-      <img src={herbas} alt="herbas" />
-    </div>
     <br />
     <p>
       Lietuvos Respublikos nepriklausomybės atkūrimo dienos proga Lietuvos
