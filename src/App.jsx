@@ -144,7 +144,6 @@ export const InvitationTextDE = ({ person }) => (
 export default function App() {
   const [people, setPeople] = useState([]);
   const [selectedPerson, setSelectedPerson] = useState(null);
-  const [emailPerson, setEmailPerson] = useState(null);
 
   /* ---------- EXCEL UPLOAD ---------- */
   const handleExcelUpload = (e) => {
@@ -300,9 +299,6 @@ const downloadWordInvitation = (p) => {
             </div>
 
             <div className="preview-actions">
-              <button onClick={() => setEmailPerson(p)}>
-                <TfiEmail />
-              </button>
               <span>{p.language}</span>
             </div>
           </div>
