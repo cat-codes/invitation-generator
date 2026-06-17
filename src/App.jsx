@@ -168,22 +168,20 @@ export const InvitationTextDE = ({ person, event }) => (
     </div>
     <br />
     <p>
-      Im Gedenken an den 85. Jahrestag der sowjetischen Deportationen aus Litauen gibt sich der <br />
-      Generalkonsul der Republik Litauen, Herr Donatas Kušlys, unter der Schirmherrschaft von Frau Dr. <br />
+      Im Gedenken an den 85. Jahrestag der sowjetischen Deportationen aus Litauen gibt sich der
+      Generalkonsul der Republik Litauen, Herr Donatas Kušlys, unter der Schirmherrschaft von Frau Dr.
       Petra Loibl, Beauftragte der Bayerischen Staatsregierung für Aussiedler und Vertriebene die Ehre,
       <br />
     </p>
     <br />
     <p>
       <strong>
-        <em>
-          {person.address} {person.additive} {person.name} {person.surname} mit Begleitung
-        </em>
+        {person.address} {person.additive} {person.name} {person.surname} mit Begleitung
       </strong>
     </p>
     <br />
     <p>
-      zur Vorführung des Films „Ashes in the Snow“ von Marius A. Markevičius am 15. Juli <br />
+      zur Vorführung des Films „Ashes in the Snow“ von Marius A. Markevičius am 15. Juli
       um 18:00 Uhr einzuladen.
     </p>
     <br />
@@ -202,7 +200,7 @@ export const InvitationTextDE = ({ person, event }) => (
     </div>
     <br />
     <p className="note">
-      Da die Teilnehmerzahl begrenzt ist, empfehlen wir eine frühzeitige Anmeldung. Die Anmeldung kann bereits vor dem Anmeldeschluss geschlossen <br />
+      Da die Teilnehmerzahl begrenzt ist, empfehlen wir eine frühzeitige Anmeldung. Die Anmeldung kann bereits vor dem Anmeldeschluss geschlossen
       werden, falls alle Plätze vergeben sind. <br />
       Der Film wird in englischer Sprache mit deutschen Untertiteln vorgeführt.
     </p>
