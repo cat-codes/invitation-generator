@@ -5,7 +5,7 @@ import { jsPDF } from "jspdf";
 import "./App.scss";
 import { TfiEmail } from "react-icons/tfi";
 import herbas from "./assets/herbas.png";
-import backgroud from "./assets/background.png";
+import background from "./assets/background.png";
 
 /* ---------------- DECLINATION ---------------- */
 
