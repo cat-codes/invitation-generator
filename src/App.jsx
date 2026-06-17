@@ -4,7 +4,6 @@ import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import "./App.scss";
 import { TfiEmail } from "react-icons/tfi";
-import herbas from "./assets/herbas.png";
 import background from "./assets/background.png";
 
 /* ---------------- DECLINATION ---------------- */
@@ -161,9 +160,6 @@ export const InvitationTextLT = ({ person, event }) => (
 
 export const InvitationTextDE = ({ person, event }) => (
   <div className="invitation-text">
-    <div className="herbas-wrapper">
-      <img src={herbas} alt="herbas" />
-    </div>
     <br />
     <p>
       Im Gedenken an den 85. Jahrestag der sowjetischen Deportationen aus Litauen gibt sich der
