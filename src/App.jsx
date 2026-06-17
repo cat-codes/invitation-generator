@@ -3,7 +3,6 @@ import * as XLSX from "xlsx";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import "./App.scss";
-import { TfiEmail } from "react-icons/tfi";
 import background from "./assets/background.png";
 
 /* ---------------- DECLINATION ---------------- */
@@ -32,7 +31,7 @@ function declineWord(word, caseType) {
     else if (lower.endsWith("is")) declined = word.slice(0, -2) + "i";
     else if (lower.endsWith("ys")) declined = word.slice(0, -2) + "y";
   }
-
+  
   return declined;
 }
 
@@ -50,71 +49,9 @@ function decline(input, caseType = "accusative") {
     .join(" ");
 }
 
-/* ---------------- DATE FORMATTING ---------------- */
-
-const formatDateLT = (iso) => {
-  // iso - date format: yyyy-mm-dd
-  const d = new Date(iso);
-  const months = [
-    "sausio",
-    "vasario",
-    "kovo",
-    "balandžio",
-    "gegužės",
-    "birželio",
-    "liepos",
-    "rugpjūčio",
-    "rugsėjo",
-    "spalio",
-    "lapkričio",
-    "gruodžio",
-  ];
-  return `${d.getFullYear()} m. ${months[d.getMonth()]} ${d.getDate()}-ą`;
-};
-
-const formatDateDE = (iso) =>
-  new Date(iso).toLocaleDateString("de-DE", {
-    // de-DE - german (Germany) formatting
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-
-/* ---------------- EMAIL TEXT ---------------- */
-
-const emailTextLT = (p, link, event) => `
-Laba diena, 
-
-maloniai kviečiame ${decline(p.name, "accusative")} ${decline(p.surname, "accusative")} į ${decline(event.titleLT, "accusative")}.
-
-Renginys vyks ${formatDateLT(event.date)} ${event.time} val. Lietuvos Respublikos generaliniame konsulate Miunchene.
-
-Prašome patvirtinti savo dalyvavimą arba atsisakyti pakvietimo užpildant šią formą:
-
-${link}
-
-Pagarbiai
-LR generalinis konsulatas Miunchene
-`;
-
-const emailTextDE = (p, link, event) => `
-Sehr geehrte Damen und Herren,
-
-wir laden ${p.gender === "F" ? "Frau" : "Herrn"} ${p.surname} zur ${event.titleDE} ein.
-
-Die Veranstaltung findet am ${formatDateDE(event.date)} um ${event.time} Uhr im Generalkonsulat der Republik Litauen in München statt.
-
-Bitte bestätigen oder lehnen Sie Ihre Teilnahme über folgendes Formular ab:
-
-${link}
-
-Mit freundlichen Grüßen
-Generalkonsulat der Republik Litauen
-`;
-
 /* ---------------- INVITATION COMPONENTS ---------------- */
 
-export const InvitationTextLT = ({ person, event }) => (
+export const InvitationTextLT = ({ person }) => (
   <div className="invitation-text">
     <br />
     <p>
@@ -158,7 +95,7 @@ export const InvitationTextLT = ({ person, event }) => (
   </div>
 );
 
-export const InvitationTextDE = ({ person, event }) => (
+export const InvitationTextDE = ({ person }) => (
   <div className="invitation-text">
     <br />
     <p>
@@ -209,13 +146,6 @@ export default function App() {
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [emailPerson, setEmailPerson] = useState(null);
 
-  const [event, setEvent] = useState({
-    // titleLT: "",
-    // titleDE: "",
-    date: "",
-    time: "",
-  });
-
   /* ---------- EXCEL UPLOAD ---------- */
   const handleExcelUpload = (e) => {
     const reader = new FileReader();
@@ -245,30 +175,6 @@ export default function App() {
     };
     reader.readAsBinaryString(e.target.files[0]);
   };
-
-  /* ---------- GOOGLE FORM LINK ---------- */
-  const buildFormLink = (p) => {
-    const lang = (p.language || "").toUpperCase();
-    const baseUrl =
-      lang === "LT"
-        ? "https://docs.google.com/forms/d/e/1FAIpQLSc9LjfFCma2QhnoYc5SCaEhr999EuOGXU_zDZlxnpDRiY485w/viewform?usp=pp_url"
-        : "https://docs.google.com/forms/d/e/1FAIpQLSc0bmZ-AMFlnvrUhFg46vL_H_SKBK3d2BZg73H27xAt1ZsSLw/viewform?usp=pp_url";
-
-    const url = new URL(baseUrl);
-
-    if (lang === "LT") {
-      url.searchParams.set("entry.1896882254", p.name);
-      url.searchParams.set("entry.471508015", p.surname);
-      url.searchParams.set("entry.1614724266", p.email);
-    } else {
-      url.searchParams.set("entry.1394455811", p.name);
-      url.searchParams.set("entry.1710675518", p.surname);
-      url.searchParams.set("entry.1668225483", p.email);
-    }
-
-    return url.toString();
-  };
-
   /* ---------- DOWNLOAD HELPER ---------- */
   const downloadInvitation = async (p, format) => {
   const el = document.getElementById("invitation-modal");
@@ -423,16 +329,11 @@ const downloadWordInvitation = (p) => {
             >
               <div className="invitation-card">
                 <div className="invitation-inner">
-                  <h2 className="title">
-                    {selectedPerson.language === "LT"
-                      ? event.titleLT
-                      : event.titleDE}
-                  </h2>
 
                   {selectedPerson.language === "LT" ? (
-                    <InvitationTextLT person={selectedPerson} event={event} />
+                    <InvitationTextLT person={selectedPerson} />
                   ) : (
-                    <InvitationTextDE person={selectedPerson} event={event} />
+                    <InvitationTextDE person={selectedPerson} />
                   )}
                 </div>
               </div>
@@ -448,73 +349,6 @@ const downloadWordInvitation = (p) => {
                <button onClick={() => downloadWordInvitation(selectedPerson)}>
                 Word
                </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* EMAIL MODAL */}
-      {emailPerson && (
-        <div className="modal-bg" onClick={() => setEmailPerson(null)}>
-          <div className="modal wide" onClick={(e) => e.stopPropagation()}>
-            <button className="close" onClick={() => setEmailPerson(null)}>
-              ×
-            </button>
-
-            <div className="email-columns">
-              {emailPerson.language === "LT" && (
-                <div>
-                  <h3>LT</h3>
-                  <textarea
-                    readOnly
-                    value={emailTextLT(
-                      emailPerson,
-                      buildFormLink(emailPerson),
-                      event,
-                    )}
-                  />
-                  <button
-                    onClick={() =>
-                      navigator.clipboard.writeText(
-                        emailTextLT(
-                          emailPerson,
-                          buildFormLink(emailPerson),
-                          event,
-                        ),
-                      )
-                    }
-                  >
-                    Kopijuoti
-                  </button>
-                </div>
-              )}
-
-              {emailPerson.language === "DE" && (
-                <div>
-                  <h3>DE</h3>
-                  <textarea
-                    readOnly
-                    value={emailTextDE(
-                      emailPerson,
-                      buildFormLink(emailPerson),
-                      event,
-                    )}
-                  />
-                  <button
-                    onClick={() =>
-                      navigator.clipboard.writeText(
-                        emailTextDE(
-                          emailPerson,
-                          buildFormLink(emailPerson),
-                          event,
-                        ),
-                      )
-                    }
-                  >
-                    Kopieren
-                  </button>
-                </div>
-              )}
             </div>
           </div>
         </div>
