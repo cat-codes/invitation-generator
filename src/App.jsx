@@ -5,6 +5,7 @@ import { jsPDF } from "jspdf";
 import "./App.scss";
 import { TfiEmail } from "react-icons/tfi";
 import herbas from "./assets/herbas.png";
+import backgroud from "./assets/background.png";
 
 /* ---------------- DECLINATION ---------------- */
 
@@ -417,7 +418,16 @@ const downloadWordInvitation = (p) => {
               ×
             </button>
 
-            <div id="invitation-modal" className="invitation">
+            <div
+              id="invitation-modal"
+              className="invitation"
+              style={{
+                backgroundImage: `url(${invitationBg})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+              }}
+            >
               <div className="invitation-card">
                 <div className="invitation-inner">
                   <h2 className="title">
